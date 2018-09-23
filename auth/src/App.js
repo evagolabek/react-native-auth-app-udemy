@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import firebase from 'firebase';
 import { Header } from './components/common';
+import LoginForm from './components/LoginForm';
 
 // firebase import should be above other imports
 //configuration object(below)is paste from the firebase website
@@ -20,7 +21,7 @@ class App extends Component {
     return (
       <View>
       <Header headerText="Authentication" />
-        <Text> An App</Text>
+        <LoginForm />
       </View>
     );
   }
