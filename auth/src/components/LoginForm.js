@@ -9,14 +9,16 @@ import { Button, Card, CardSection, Input } from './common';
 // THE TEXT EXISTS AS A PIECE OF STATE ON OUR COMPONENT
 
 class LoginForm extends Component {
-  state = {text: '' };
+  state = {email: '' };
   render() {
     return (
       <Card>
       <CardSection>
         <Input
-          value={this.state.text}
-          onChangeText={text => this.setState({ text: text })}
+          placeholder="user@gmail.com"
+          label="Email"
+          value={this.state.email}
+          onChangeText={email => this.setState({ email })}
         />
       </CardSection>
       <CardSection>
