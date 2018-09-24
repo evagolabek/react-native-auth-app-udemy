@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Text } from 'react-native';
+import firebase from 'firebase';
 import { Button, Card, CardSection, Input } from './common';
 
 //common directory+its index allows to import everything(button, card etc) in one line/more tidy
@@ -8,10 +10,25 @@ import { Button, Card, CardSection, Input } from './common';
 //when it rerender we tell it that the value is this.state.text
 // THE TEXT EXISTS AS A PIECE OF STATE ON OUR COMPONENT
 
-//just listing the prop secureTextEntry makes it true 
+//just listing the prop secureTextEntry makes it true
 
 class LoginForm extends Component {
-  state = { email: '', password:'' };
+  state = { email: '', password:'', error:'' };
+
+//user authentication
+//catch error function when signin fails
+  onButtonPress() {
+    const { email, password } = this.state;
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .catch(() => {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+          .catc(() => {
+            this.setState({ error: 'authentication failed.'});
+          });
+      });
+  }
+
   render() {
     return (
       <Card>
@@ -34,8 +51,12 @@ class LoginForm extends Component {
         />
       </CardSection>
 
+      <Text style={styles.errorTextStyle}>
+        {this.state.error}
+      </Text>
+
       <CardSection>
-        <Button>
+        <Button onPress={this.onButtonPress.bind}>
           LogIn
         </Button>
       </CardSection>
@@ -43,5 +64,13 @@ class LoginForm extends Component {
     );
   }
 }
+
+const styles = {
+  errorTextStyle: {
+    fontSize: 20,
+    alignSelf: 'center',
+    color: 'red'
+  }
+};
 
 export default LoginForm;
