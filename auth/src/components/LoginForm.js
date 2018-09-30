@@ -32,6 +32,8 @@ class LoginForm extends Component {
       });
   }
 
+//helper method to handle the case when user succesfully signedin
+//cleaouts error message and cleanout the form, resseting the state
   onLoginSuccess() {
     this.setState({
       email: '',
