@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import firebase from 'firebase';
-import { Header } from './components/common';
+import { Header, Button, Spinner } from './components/common';
 import LoginForm from './components/LoginForm';
 
 // firebase import should be above other imports
 //configuration object(below)is paste from the firebase website
 class App extends Component {
   //by default user is not loggedIn
-  state = { loggedIn: false }
+  //null represent 'no idea if you signed in or not'
+  state = { loggedIn: null }
 
   componentWillMount() {
     firebase.initializeApp({
@@ -20,8 +21,8 @@ class App extends Component {
     messagingSenderId: "469692650204"
   });
 
-    //component level state that tract whether user is loggedin or not
-    //callback from the firebase library
+    // component level state that tract whether user is loggedin or not
+    // callback from the firebase library
     firebase.auth(.onAuthStateChanged(user) => {
       if (user) {
         this.setState({ loggedIn: true });
@@ -29,6 +30,26 @@ class App extends Component {
         this.setState({ loggedIn: false });
       }
     });
+  }
+
+  renderContent() {
+    switch (this.state.loggedIn) {
+      case true:
+        return <Button>Log Out</Button>;
+      case false:
+        return <LoginForm />;
+      default:
+        return <Spinner size="large" />;
+    }
+    if (this.state.loggedIn) {
+      return (
+        <Button>
+        Log Out
+        </Button>
+      );
+    }
+
+    return <LoginForm />;
   }
   render() {
     return (
