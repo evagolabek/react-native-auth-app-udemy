@@ -23,7 +23,7 @@ class App extends Component {
 
     // component level state that tract whether user is loggedin or not
     // callback from the firebase library
-    firebase.auth(.onAuthStateChanged(user) => {
+    firebase.auth().onAuthStateChanged(user) => {
       if (user) {
         this.setState({ loggedIn: true });
       } else {
@@ -35,7 +35,10 @@ class App extends Component {
   renderContent() {
     switch (this.state.loggedIn) {
       case true:
-        return <Button>Log Out</Button>;
+        return (
+          <Button onPress={() => firebase.auth().signedOut()}>
+            Log Out
+          </Button>
       case false:
         return <LoginForm />;
       default:
