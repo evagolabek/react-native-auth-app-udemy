@@ -23,12 +23,22 @@ class LoginForm extends Component {
     this.setState({ error: '', loading: true});
 
     firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(this.onLoginSuccess)
       .catch(() => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
           .catc(() => {
             this.setState({ error: 'authentication failed.'});
           });
       });
+  }
+
+  onLoginSuccess() {
+    this.setState({
+      email: '',
+      password: '',
+      loading: false,
+      error: ''
+    });
   }
 
 //helper method to show the spinner when loading (when user clicks on login button)
