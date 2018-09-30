@@ -7,6 +7,9 @@ import LoginForm from './components/LoginForm';
 // firebase import should be above other imports
 //configuration object(below)is paste from the firebase website
 class App extends Component {
+  //by default user is not loggedIn
+  state = { loggedIn: false }
+
   componentWillMount() {
     firebase.initializeApp({
     apiKey: "AIzaSyBf94VGTNcjXb_mr2pT8VnD1N5l0Z7MCTQ",
@@ -16,6 +19,16 @@ class App extends Component {
     storageBucket: "authentication-23320.appspot.com",
     messagingSenderId: "469692650204"
   });
+
+    //component level state that tract whether user is loggedin or not
+    //callback from the firebase library
+    firebase.auth(.onAuthStateChanged(user) => {
+      if (user) {
+        this.setState({ loggedIn: true });
+      } else {
+        this.setState({ loggedIn: false });
+      }
+    });
   }
   render() {
     return (

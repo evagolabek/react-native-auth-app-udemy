@@ -24,7 +24,7 @@ class LoginForm extends Component {
 
     firebase.auth().signInWithEmailAndPassword(email, password)
     //function being passed into a promise
-    //we don't know the conext it will be called with, we have to bind the context
+    //we don't know the conext it will be called with, we have to //bind the context
     .then(this.onLoginSuccess.bind(this))
       .catch(() => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
