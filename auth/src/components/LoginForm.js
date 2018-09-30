@@ -15,25 +15,31 @@ import { Button, Card, CardSection, Input, Spinner } from './common';
 class LoginForm extends Component {
   state = { email: '', password:'', error:'', loading: false };
 
-//user authentication
-//catch error function when signin fails
+  //user authentication
+  //catch error function when signin fails
   onButtonPress() {
     const { email, password } = this.state;
 
     this.setState({ error: '', loading: true});
 
     firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(this.onLoginSuccess)
+    //function being passed into a promise
+    //we don't know the conext it will be called with, we have to bind the context
+    .then(this.onLoginSuccess.bind(this))
       .catch(() => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
-          .catc(() => {
-            this.setState({ error: 'authentication failed.'});
-          });
+        //handling the succesfully signin
+          .then(this.onLoginSuccess.bind(this))
+          .catch(this.onLoginFail.bind(this));
       });
   }
 
-//helper method to handle the case when user succesfully signedin
-//cleaouts error message and cleanout the form, resseting the state
+  onLoginFail() {
+    this.setState({ error: 'Authentication Failed', loading: false })
+  }
+
+  //helper method to handle the case when user succesfully signedin
+  //cleaouts error message and cleanout the form, resseting the state
   onLoginSuccess() {
     this.setState({
       email: '',
@@ -43,8 +49,8 @@ class LoginForm extends Component {
     });
   }
 
-//helper method to show the spinner when loading (when user clicks on login button)
-//this method make sure it is either the button or the spinner displayed
+  //helper method to show the spinner when loading (when user clicks on login button)
+  //this method make sure it is either the button or the spinner displayed
   renderButton() {
     if (this.state.loading === true) {
       return <Spinner size="small" />;
