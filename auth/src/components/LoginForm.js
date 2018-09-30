@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 import firebase from 'firebase';
-import { Button, Card, CardSection, Input } from './common';
+import { Button, Card, CardSection, Input, Spinner } from './common';
 
 //common directory+its index allows to import everything(button, card etc) in one line/more tidy
 // onChangeText event function is called whenever user type text in TextInput
@@ -13,12 +13,14 @@ import { Button, Card, CardSection, Input } from './common';
 //just listing the prop secureTextEntry makes it true
 
 class LoginForm extends Component {
-  state = { email: '', password:'', error:'' };
+  state = { email: '', password:'', error:'', loading: false };
 
 //user authentication
 //catch error function when signin fails
   onButtonPress() {
     const { email, password } = this.state;
+
+    this.setState({ error: '', loading: true});
 
     firebase.auth().signInWithEmailAndPassword(email, password)
       .catch(() => {
@@ -27,6 +29,20 @@ class LoginForm extends Component {
             this.setState({ error: 'authentication failed.'});
           });
       });
+  }
+
+//helper method to show the spinner when loading (when user clicks on login button)
+//this method make sure it is either the button or the spinner displayed
+  renderButton() {
+    if (this.state.loading === true) {
+      return <Spinner size="small" />;
+    }
+
+    return (
+      <Button onPress={this.onButtonPress.bind}>
+        LogIn
+      </Button>
+    );
   }
 
   render() {
@@ -56,9 +72,7 @@ class LoginForm extends Component {
       </Text>
 
       <CardSection>
-        <Button onPress={this.onButtonPress.bind}>
-          LogIn
-        </Button>
+       {this.renderButton()}
       </CardSection>
       </Card>
     );
