@@ -13,24 +13,24 @@ class App extends Component {
 
   componentWillMount() {
     firebase.initializeApp({
-    apiKey: "AIzaSyBf94VGTNcjXb_mr2pT8VnD1N5l0Z7MCTQ",
-    authDomain: "authentication-23320.firebaseapp.com",
-    databaseURL: "https://authentication-23320.firebaseio.com",
-    projectId: "authentication-23320",
-    storageBucket: "authentication-23320.appspot.com",
-    messagingSenderId: "469692650204"
-  });
+      apiKey: "AIzaSyBf94VGTNcjXb_mr2pT8VnD1N5l0Z7MCTQ",
+      authDomain: "authentication-23320.firebaseapp.com",
+      databaseURL: "https://authentication-23320.firebaseio.com",
+      projectId: "authentication-23320",
+      storageBucket: "authentication-23320.appspot.com",
+      messagingSenderId: "469692650204"
+    });
 
     // component level state that tract whether user is loggedin or not
     // callback from the firebase library
-    firebase.auth().onAuthStateChanged(user) => {
+    firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         this.setState({ loggedIn: true });
       } else {
         this.setState({ loggedIn: false });
       }
-    });
-  }
+    }.bind(this));
+  };
 
   renderContent() {
     switch (this.state.loggedIn) {
@@ -39,20 +39,21 @@ class App extends Component {
           <Button onPress={() => firebase.auth().signedOut()}>
             Log Out
           </Button>
+        );
       case false:
         return <LoginForm />;
       default:
         return <Spinner size="large" />;
     }
-    if (this.state.loggedIn) {
-      return (
-        <Button>
-        Log Out
-        </Button>
-      );
-    }
+    // if (this.state.loggedIn) {
+    //   return (
+    //     <Button>
+    //     Log Out
+    //     </Button>
+    //   );
+    // }
 
-    return <LoginForm />;
+    // return <LoginForm />;
   }
   render() {
     return (
